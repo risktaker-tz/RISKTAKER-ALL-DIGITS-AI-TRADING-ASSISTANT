@@ -1,5 +1,5 @@
 import { contractRegistry } from "@/lib/domain/contracts";
-import { buildDigitDistribution, extractLastDigit, type TickQuote } from "@/lib/domain/ticks";
+import { buildDigitDistribution, type TickQuote } from "@/lib/domain/ticks";
 
 export type StrategyModuleConfig = {
   type: keyof typeof contractRegistry;
@@ -16,7 +16,7 @@ export type MarketScore = {
 
 export function scoreMarket(symbol: string, ticks: TickQuote[], modules: StrategyModuleConfig[]): MarketScore {
   const distribution = buildDigitDistribution(ticks);
-  const recentDigits = ticks.slice(-7).map((tick) => extractLastDigit(tick.quote));
+  const recentDigits = ticks.slice(-7).map((tick) => tick.lastDigit);
   let readiness = 0;
 
   modules.forEach((module) => {

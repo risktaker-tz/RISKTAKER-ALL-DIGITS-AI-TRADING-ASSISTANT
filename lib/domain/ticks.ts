@@ -1,12 +1,36 @@
 export type TickQuote = {
   symbol: string;
   quote: number;
+  display: string;
   epoch: number;
+  lastDigit: number;
 };
 
-export function extractLastDigit(quote: number): number {
-  const normalized = quote.toFixed(5).replace(".", "");
-  return Number(normalized.at(-1) ?? "0");
+export function extractLastDigit(quote: number | string): number {
+  const raw = String(quote).trim();
+  const numeric = raw.replace(/[^0-9.]/g, "");
+  const parts = numeric.split(".");
+  const fraction = parts[1] ?? "";
+  const source = fraction || parts[0] || "0";
+  const digit = source.replace(/\D/g, "").slice(-1) || "0";
+  return Number(digit);
+}
+
+export function createTickQuote(args: {
+  symbol: string;
+  quote: number;
+  display?: string;
+  epoch: number;
+}): TickQuote {
+  const display = args.display ?? String(args.quote);
+
+  return {
+    symbol: args.symbol,
+    quote: args.quote,
+    display,
+    epoch: args.epoch,
+    lastDigit: extractLastDigit(display)
+  };
 }
 
 export function buildDigitDistribution(ticks: TickQuote[]) {
@@ -17,7 +41,7 @@ export function buildDigitDistribution(ticks: TickQuote[]) {
   }));
 
   ticks.forEach((tick) => {
-    totals[extractLastDigit(tick.quote)].count += 1;
+    totals[tick.lastDigit].count += 1;
   });
 
   return totals.map((entry) => ({
