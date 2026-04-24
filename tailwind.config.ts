@@ -6,21 +6,21 @@ const config: Config = {
     "./components/**/*.{ts,tsx}",
     "./lib/**/*.{ts,tsx}"
   ],
+  darkMode: ["class"],
   theme: {
     extend: {
       colors: {
-        ink: "#050816",
-        panel: "#0d142c",
-        pulse: "#00f5d4",
-        flare: "#35a7ff",
-        ember: "#ff6b6b",
-        gold: "#ffd166"
+        ink: "#07111F",
+        mist: "#EBF4FF",
+        cyan: "#2AD4FF",
+        coral: "#FF7F6F",
+        sand: "#FFD9A0"
       },
       boxShadow: {
-        neon: "0 0 0 1px rgba(53,167,255,0.18), 0 18px 60px rgba(0, 245, 212, 0.12)"
+        glass: "0 24px 80px rgba(7, 17, 31, 0.18)"
       },
       backgroundImage: {
-        grid: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0)"
+        aura: "radial-gradient(circle at top, rgba(42, 212, 255, 0.26), transparent 35%), radial-gradient(circle at bottom right, rgba(255, 127, 111, 0.2), transparent 30%), linear-gradient(135deg, #07111F 0%, #0F1D33 48%, #13284B 100%)"
       }
     }
   },

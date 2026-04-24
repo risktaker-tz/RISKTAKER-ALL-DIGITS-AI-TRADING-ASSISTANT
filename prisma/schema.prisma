@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  SYSTEM
+}
+
+enum CallType {
+  VOICE
+  VIDEO
+}
+
+model User {
+  id                     String         @id @default(cuid())
+  phoneNumberEncrypted   String
+  phoneNumberHash        String         @unique
+  username               String         @unique
+  displayName            String?
+  bio                    String?
+  avatarUrl              String?
+  locale                 String         @default("en")
+  isVerified             Boolean        @default(false)
+  offlineSmsOptIn        Boolean        @default(false)
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+  posts                  Post[]
+  statuses               Status[]
+  followers              Follow[]       @relation("followers")
+  following              Follow[]       @relation("following")
+  comments               Comment[]
+  likes                  Like[]
+  messagesSent           Message[]      @relation("messageSender")
+  chatMembers            ChatMember[]
+  notificationRecipients Notification[]
+}
+
+model Follow {
+  id           String   @id @default(cuid())
+  followerId   String
+  followingId  String
+  createdAt    DateTime @default(now())
+  follower     User     @relation("following", fields: [followerId], references: [id], onDelete: Cascade)
+  following    User     @relation("followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+}
+
+model Post {
+  id          String      @id @default(cuid())
+  authorId    String
+  caption     String?
+  hashtags    String[]
+  location    String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  author      User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  media       MediaAsset[]
+  comments    Comment[]
+  likes       Like[]
+}
+
+model MediaAsset {
+  id           String    @id @default(cuid())
+  postId       String?
+  statusId     String?
+  messageId    String?
+  type         MediaType
+  url          String
+  previewUrl   String?
+  durationSec  Int?
+  width        Int?
+  height       Int?
+  storageKey   String
+  createdAt    DateTime  @default(now())
+  post         Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  status       Status?   @relation(fields: [statusId], references: [id], onDelete: Cascade)
+  message      Message?  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  postId     String
+  authorId   String
+  body       String
+  createdAt  DateTime @default(now())
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Like {
+  id         String   @id @default(cuid())
+  postId     String
+  userId     String
+  createdAt  DateTime @default(now())
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+}
+
+model Status {
+  id           String       @id @default(cuid())
+  authorId     String
+  text         String?
+  expiresAt    DateTime?
+  createdAt    DateTime     @default(now())
+  author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  media        MediaAsset[]
+}
+
+model Chat {
+  id            String       @id @default(cuid())
+  isTuchati     Boolean      @default(false)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  members       ChatMember[]
+  messages      Message[]
+  calls         CallSession[]
+}
+
+model ChatMember {
+  id         String   @id @default(cuid())
+  chatId      String
+  userId      String
+  joinedAt    DateTime @default(now())
+  chat        Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([chatId, userId])
+}
+
+model Message {
+  id                  String       @id @default(cuid())
+  chatId              String
+  senderId            String
+  body                String?
+  type                MessageType  @default(TEXT)
+  sentAt              DateTime     @default(now())
+  readAt              DateTime?
+  deliveredViaSms     Boolean      @default(false)
+  smsRelayReference   String?
+  chat                Chat         @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender              User         @relation("messageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  media               MediaAsset[]
+}
+
+model CallSession {
+  id            String    @id @default(cuid())
+  chatId         String
+  initiatorId    String
+  type           CallType
+  startedAt      DateTime @default(now())
+  endedAt        DateTime?
+  chat           Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id           String   @id @default(cuid())
+  recipientId  String
+  title        String
+  body         String
+  href         String?
+  isRead       Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  recipient    User     @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+}

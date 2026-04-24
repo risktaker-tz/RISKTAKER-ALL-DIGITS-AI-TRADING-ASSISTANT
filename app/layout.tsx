@@ -1,21 +1,20 @@
-import type { Metadata, Viewport } from "next";
-import "./globals.css";
+import type { Metadata } from "next";
+
+import "@/app/globals.css";
+import { PwaProvider } from "@/components/pwa-provider";
 
 export const metadata: Metadata = {
-  title: "RISK TAKER DIGIT AI",
-  description: "AI-powered modular digit trading configurator with strict execution guards."
+  title: "TUCHATI",
+  description: "A multimedia social app with private TUCHATI messaging."
 };
 
-export const viewport: Viewport = {
-  themeColor: "#050816",
-  width: "device-width",
-  initialScale: 1
-};
-
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <PwaProvider />
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,0 +1,15 @@
+{
+  "brand": "TUCHATI",
+  "tagline": "Fuata. Shiriki. Fungua mawasiliano ya kweli.",
+  "auth.signupTitle": "Fungua akaunti yako",
+  "auth.phoneLabel": "Namba ya simu",
+  "auth.usernameLabel": "Jina la mtumiaji",
+  "auth.requestOtp": "Tuma OTP",
+  "auth.verifyOtp": "Thibitisha OTP",
+  "feed.title": "Feed yako ya media",
+  "feed.subtitle": "Picha, video, na sauti kutoka kwa watu unaowafuata.",
+  "messages.title": "Ujumbe wa TUCHATI",
+  "discover.title": "Gundua wabunifu",
+  "profile.follow": "Fuata",
+  "profile.tuchati": "Fungua TUCHATI"
+}

@@ -1,0 +1,15 @@
+{
+  "brand": "TUCHATI",
+  "tagline": "Sigue. Comparte. Desbloquea una conexión real.",
+  "auth.signupTitle": "Crea tu cuenta",
+  "auth.phoneLabel": "Número de teléfono",
+  "auth.usernameLabel": "Nombre de usuario",
+  "auth.requestOtp": "Enviar OTP",
+  "auth.verifyOtp": "Verificar OTP",
+  "feed.title": "Tu feed multimedia",
+  "feed.subtitle": "Fotos, videos y audio de la gente que sigues.",
+  "messages.title": "Mensajes de TUCHATI",
+  "discover.title": "Descubrir creadores",
+  "profile.follow": "Seguir",
+  "profile.tuchati": "Abrir TUCHATI"
+}
