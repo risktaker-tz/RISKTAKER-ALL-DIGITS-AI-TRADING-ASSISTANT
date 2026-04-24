@@ -504,7 +504,7 @@ export function Dashboard() {
                         exit={{ opacity: 0, y: -18 }}
                         className="rounded-3xl border border-gold/30 bg-gold/10 p-4 text-sm text-gold"
                       >
-                        READY -> EXECUTING on {signalFlash.market} with {signalFlash.module} at digit {signalFlash.digit}
+                        READY {"->"} EXECUTING on {signalFlash.market} with {signalFlash.module} at digit {signalFlash.digit}
                       </motion.div>
                     ) : null}
                   </AnimatePresence>
